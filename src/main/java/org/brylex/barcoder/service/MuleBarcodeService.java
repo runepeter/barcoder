@@ -1,6 +1,5 @@
 package org.brylex.barcoder.service;
 
-import org.mule.api.MuleException;
 import org.mule.api.client.LocalMuleClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +17,10 @@ public class MuleBarcodeService implements BarcodeService
     {
         try
         {
-            client.dispatch("vm://create", "JALLA, BALLA", Collections.<String, Object>emptyMap());
-        } catch (MuleException e)
+            client.dispatch("vm://create", url, Collections.<String, Object>emptyMap());
+        } catch (Exception e)
         {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException("Unable to create barcode for URL '" + url + "'.", e);
         }
     }
 }

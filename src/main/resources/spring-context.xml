@@ -8,6 +8,9 @@
 
   <context:component-scan base-package="org.brylex.barcoder.rest" />
   <context:component-scan base-package="org.brylex.barcoder.service" />
+  <context:component-scan base-package="org.brylex.barcoder.repository" />
+  <context:component-scan base-package="org.brylex.barcoder.mule" />
+  <context:component-scan base-package="org.brylex.barcoder.generator" />
 
   <bean class="no.jforce.mule.spring.EmbeddedMuleServer" destroy-method="destroy">
     <constructor-arg value="classpath:mule-context.xml" />

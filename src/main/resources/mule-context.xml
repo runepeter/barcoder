@@ -12,18 +12,9 @@
 
   <flow name="create">
     <vm:inbound-endpoint path="create"/>
-    <vm:outbound-endpoint path="create-qr"/>
-    <vm:outbound-endpoint path="create-datamatrix"/>
-  </flow>
-
-  <flow name="create-qr">
-    <vm:inbound-endpoint path="create-qr"/>
-    <log-component/>
-  </flow>
-
-  <flow name="create-datamatrix">
-    <vm:inbound-endpoint path="create-datamatrix"/>
-    <log-component/>
+    <component>
+      <spring-object bean="generateAndStoreBarcode" />
+    </component>
   </flow>
 
 </mule>

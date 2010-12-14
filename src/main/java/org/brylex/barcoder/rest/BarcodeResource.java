@@ -1,13 +1,19 @@
 package org.brylex.barcoder.rest;
 
+import org.brylex.barcoder.Barcode;
+import org.brylex.barcoder.repository.BarcodeRepository;
 import org.brylex.barcoder.service.BarcodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 
 @Component
 @Path("barcode")
@@ -16,28 +22,36 @@ public class BarcodeResource
     @Autowired
     private BarcodeService service;
 
+    @Autowired
+    private BarcodeRepository repository;
+
+    @Context
+    private UriInfo uriInfo;
+
     @PUT
     @Path("{url}")
-    public Response create(@PathParam("url") String url) throws Exception
+    public Response create(@PathParam("url") URL url) throws Exception
     {
-        service.create(new URL("http://www.vg.no"));
+        service.create(url);
 
-        return Response.created(new URI("urn:jalla")).build();
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.path(".png");
+
+        return Response.created(builder.build()).type("image/x-png").build();
     }
 
     @GET
-    @Path("qr/{url}")
-    @Produces("application/barcode+qr")
-    public Response getQr(@PathParam("url") URL url)
+    @Path("{url}.png")
+    @Produces("image/x-png")
+    public Response get(@PathParam("url") URL url)
     {
-        return Response.ok("jalla").build();
-    }
+        Barcode barcode = repository.getByUrl(url);
+        if (barcode == null)
+        {
+            return Response.status(Response.Status.NOT_FOUND).entity("There's no barcode available for URL '" + url + "'.").build();
+        }
 
-    @GET
-    @Path("datamatrix/{url}")
-    @Produces("application/barcode+datamatrix")
-    public Response getDatamatrix(@PathParam("url") URL url)
-    {
-        return Response.ok("jalla").build();
+        return Response.ok(barcode.getBytes()).build();
     }
+    
 }
