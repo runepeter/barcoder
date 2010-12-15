@@ -32,20 +32,25 @@ public class BarcodeResource
     @Path("{url}")
     public Response create(@PathParam("url") URL url) throws Exception
     {
-        service.create(url);
+        URI uri = UriBuilder.fromUri(url.toURI()).path(".png").build();
 
-        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        builder.path(".png");
+        service.create(uri.toURL());
 
-        return Response.created(builder.build()).type("image/x-png").build();
+        String encoded = URLEncoder.encode(uri.toString(), "UTF-8");
+
+        URI imageUri = uriInfo.getBaseUriBuilder().path("barcode").path("{uri}").buildFromEncoded(encoded);
+
+        return Response.created(imageUri).type("image/x-png").build();
     }
 
     @GET
     @Path("{url}.png")
     @Produces("image/x-png")
-    public Response get(@PathParam("url") URL url)
+    public Response get(@PathParam("url") URL url) throws Exception
     {
-        Barcode barcode = repository.getByUrl(url);
+        URI uri = UriBuilder.fromUri(url.toURI()).path(".png").build();
+
+        Barcode barcode = repository.getByUrl(uri.toURL());
         if (barcode == null)
         {
             return Response.status(Response.Status.NOT_FOUND).entity("There's no barcode available for URL '" + url + "'.").build();

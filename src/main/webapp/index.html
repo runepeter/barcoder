@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+    <title>Barcoder</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        function load_image(image_url)
+        {
+            $.ajax({url: image_url, success: function()
+            {
+                $('<img />').attr('src', image_url).load(function()
+                {
+                    $('#img_div').html($(this));
+                    $('#img_div').fadeIn('slow');
+                });
+            },error: function()
+            {
+                setTimeout("load_image('" + image_url + "');", 300);
+            }
+            });
+        }
+
+        $(document).ready(function()
+        {
+            $('#url').keypress(function(e)
+            {
+                if (e.which == 13) // on <enter>
+                {
+                    $('#url_form').submit();
+                }
+            });
+
+            $('#url_form').submit(function()
+            {
+                var url = 'rest/barcode/' + encodeURIComponent($('#url').val());
+
+                $.ajax({ url: url, type: 'PUT', success: function(data, status, request)
+                {
+                    var image_url = request.getResponseHeader('location');
+
+                    load_image(image_url);
+                }
+                });
+
+                return false;
+            });
+
+            $(document).ajaxStart(function()
+            {
+                $('#img_div').hide();
+            });
+
+            $('#url').focus();
+
+        });
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+</head>
+<body>
+
+<div id="url_div">
+    <form id="url_form">
+        <input type="text" name="url" id="url" class="urlField" value="http://enter.your.url/here"/>
+    </form>
+</div>
+
+<div class="wrapper">
+    <div id="img_div"/>
+</div>
+
+</body>
+</html>
