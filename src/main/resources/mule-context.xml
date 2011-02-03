@@ -10,7 +10,11 @@
       http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/3.0/mule-file.xsd
       http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.0/mule-vm.xsd">
 
-  <flow name="create">
+  <spring:beans>
+    <spring:import resource="classpath:spring-context.xml" />
+  </spring:beans>
+
+  <flow name="create-and-store">
     <vm:inbound-endpoint path="create"/>
     <component>
       <spring-object bean="generateAndStoreBarcode" />

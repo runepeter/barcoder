@@ -13,7 +13,7 @@ public class MuleBarcodeService implements BarcodeService
     @Autowired
     private LocalMuleClient client;
 
-    public void create(URL url)
+    public void create(final URL url)
     {
         try
         {

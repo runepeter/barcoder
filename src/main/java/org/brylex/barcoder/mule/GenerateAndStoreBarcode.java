@@ -18,7 +18,7 @@ public class GenerateAndStoreBarcode implements Callable
     private final BarcodeRepository repository;
 
     @Autowired
-    public GenerateAndStoreBarcode(BarcodeGenerator generator, BarcodeRepository repository)
+    public GenerateAndStoreBarcode(final BarcodeGenerator generator, final BarcodeRepository repository)
     {
         this.generator = generator;
         this.repository = repository;

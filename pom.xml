@@ -14,7 +14,7 @@
 
   <properties>
     <jersey.version>1.4</jersey.version>
-    <mule.version>3.0.0</mule.version>
+    <mule.version>3.1.0</mule.version>
     <spring.version>3.0.5.RELEASE</spring.version>
     <slf4j.version>1.6.1</slf4j.version>
   </properties>
@@ -72,7 +72,6 @@
   </dependencyManagement>
 
   <dependencies>
-
     <dependency>
       <groupId>no.jforce.mule</groupId>
       <artifactId>spring-embedder</artifactId>
@@ -88,7 +87,6 @@
       <artifactId>mule-transport-file</artifactId>
       <version>${mule.version}</version>
     </dependency>
-
     <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>javase</artifactId>
@@ -137,6 +135,7 @@
   </dependencies>
 
   <build>
+    <defaultGoal>jetty:run</defaultGoal>
     <plugins>
       <plugin>
         <groupId>org.mortbay.jetty</groupId>
